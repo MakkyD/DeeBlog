@@ -86,7 +86,15 @@
                       type="button"
                       class="btn btn-secondary mt-5 mr-3"
                       @click="remove(post.id)"
-                    >Remove</button>
+                    >
+                      <span
+                        v-if="loading"
+                        class="spinner-border spinner-border-sm"
+                        role="status"
+                        aria-hidden="true"
+                      ></span>
+                      Remove
+                    </button>
                     <button type="button" class="btn btn-secondary mt-5" @click="edit(post)">Edit</button>
                   </div>
                 </div>
@@ -116,6 +124,7 @@ export default {
         imageField: "",
         aboutField: ""
       },
+      loading: false,
       nav: true,
       form: false,
       cards: false,
@@ -161,13 +170,16 @@ export default {
       }
     },
     remove(i) {
+      this.loading = true;
       axios
         .delete(`https://blog-project-72d41.firebaseio.com/users/${i}.json`)
         .then(res => {
           alert("Deleted");
+          this.loading = false;
           this.getAllPosts();
         })
         .catch(err => {
+          this.loading = false;
           console.log(err);
         });
     },
