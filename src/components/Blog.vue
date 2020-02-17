@@ -70,6 +70,12 @@
           </div>
 
           <center>
+             <span
+                        v-if="loading"
+                        class="spinner-border spinner-border-sm"
+                        role="status"
+                        aria-hidden="true"
+                      ></span>
             <div v-if="cards">
               <div
                 class="card mt-4"
@@ -87,12 +93,7 @@
                       class="btn btn-secondary mt-5 mr-3"
                       @click="remove(post.id)"
                     >
-                      <span
-                        v-if="loading"
-                        class="spinner-border spinner-border-sm"
-                        role="status"
-                        aria-hidden="true"
-                      ></span>
+                     
                       Remove
                     </button>
                     <button type="button" class="btn btn-secondary mt-5" @click="edit(post)">Edit</button>
@@ -176,7 +177,8 @@ export default {
         .then(res => {
           alert("Deleted");
           this.loading = false;
-          this.getAllPosts();
+          const projectIndex = this.blogsArray.findIndex(p => p.id === i)
+          this.blogsArray.splice(projectIndex, 1)
         })
         .catch(err => {
           this.loading = false;

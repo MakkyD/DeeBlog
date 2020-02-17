@@ -34,7 +34,7 @@
               v-model="postDetails.aboutField"
             ></textarea>
           </div>
-          <button type="submit" class="btn btn-secondary mt-3 mr-3">Create post</button>
+          <button type="submit" class="btn btn-secondary mt-3 mr-3"><span v-if="isLoading" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>Create post</button>
         </form>
       </div>
 
@@ -72,6 +72,7 @@ export default {
         imageField: "",
         aboutField: ""
       },
+      isLoading : false,
       postContent: []
     };
   },
@@ -90,17 +91,23 @@ export default {
     //   this.lists.splice(index,1)
     // },
     submit() {
+      this.isLoading = true;
       axios
         .post(
           "https://blog-project-72d41.firebaseio.com/users.json",
           this.postDetails
         )
-        .then(function(res) {
+        .then(res=> {
+                this.isLoading = false;
+
           console.log(res);
+          this.postDetails = {}
           alert("post add");
         })
-        .catch(function(error) {
+        .catch(error=> {
           console.log(error);
+          alert("Something Failed")
+           this.isLoading = false;
         });
     }
   }
